@@ -1,0 +1,22 @@
+{
+  "name": "back-end-projeto-web2",
+  "version": "1.0.0",
+  "description": "Back-end do Trabalho de Desenvolvimento Web 2",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsup",
+    "dev:server": "ts-node src/index.ts"
+  },
+  "author": "Joao Vitor Tadeo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.1",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
+  }
+}
