@@ -1,12 +1,14 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true
-    },
-    "include": ["src"]
+  "compilerOptions": {
+    "target": "ES6", // Mantém o ES6 para compatibilidade moderna
+    "module": "ESNext", // Muda para ESNext para suportar ESM
+    "outDir": "./dist", // Diretório de saída
+    "rootDir": "./src", // Diretório de origem
+    "strict": true, // Ativa verificações estritas
+    "esModuleInterop": true, // Facilita importações de CommonJS
+    "skipLibCheck": true, // Ignora verificação de tipos de bibliotecas
+    "moduleResolution": "node", // Necessário para resolução de módulos no Node.js
+    "forceConsistentCasingInFileNames": true // Garante consistência de casos em arquivos
+  },
+  "include": ["src"]
 }
