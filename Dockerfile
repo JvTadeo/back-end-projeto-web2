@@ -14,8 +14,11 @@ RUN npm install
 # 5. Copia o restante do código para o container
 COPY . .
 
-# 6. Expõe a porta usada pelo servidor
+# 6. Compila o projeto
+RUN npm run build
+
+# 7. Expõe a porta usada pelo servidor
 EXPOSE 3000
 
-# 7. Comando para rodar o servidor
-CMD ["npm", "run", "build"]
+# 8. Comando para rodar o servidor
+CMD ["npm", "start"]
