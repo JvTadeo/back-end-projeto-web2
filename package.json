@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsup src/server.ts",
     "dev:server": "tsx watch src/server.ts",
-    "start": "node dist/server.js"
+    "start": "node dist/server.cjs"
   },
   "author": "Joao Vitor Tadeo",
   "license": "ISC",
