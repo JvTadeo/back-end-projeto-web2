@@ -1,17 +1,17 @@
 import { SupabaseService } from '../service/SupabaseService';
 import { Request, Response } from 'express';
 
-export class ProductsController {
+export class SaleController {
     private supabaseService : SupabaseService;
 
     constructor() {
         this.supabaseService = new SupabaseService();
 
-        this.getProducts = this.getProducts.bind(this);
+        this.getSales = this.getSales.bind(this);
     }
 
-    public async getProducts(req: Request, res: Response) : Promise<void> {
-        const {data, error} = await this.supabaseService.getAllProducts();
+    public async getSales(req: Request, res: Response) : Promise<void> {
+        const {data, error} = await this.supabaseService.getSales();
 
         if (error) {
             res.status(500).json(error);

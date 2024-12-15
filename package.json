@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup src/server.ts",
     "dev:server": "tsx watch src/server.ts"
   },
   "author": "Joao Vitor Tadeo",
@@ -14,7 +14,7 @@
     "@supabase/supabase-js": "^2.46.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

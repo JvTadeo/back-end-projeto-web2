@@ -1,17 +1,18 @@
 import { SupabaseService } from '../service/SupabaseService';
 import { Request, Response } from 'express';
 
-export class ProductsController {
+export class AuthController {
     private supabaseService : SupabaseService;
 
     constructor() {
         this.supabaseService = new SupabaseService();
 
-        this.getProducts = this.getProducts.bind(this);
+        this.login = this.login.bind(this);
     }
 
-    public async getProducts(req: Request, res: Response) : Promise<void> {
-        const {data, error} = await this.supabaseService.getAllProducts();
+    public async login(req: Request, res: Response) : Promise<void> {
+        const { email, password } = req.body;
+        const {data, error} = await this.supabaseService.login(email, password);
 
         if (error) {
             res.status(500).json(error);

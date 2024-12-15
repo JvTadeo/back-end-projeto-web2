@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # 7. Comando para rodar o servidor
-CMD ["npm", "run", "dev:server"]
+CMD ["npm", "run", "build"]
