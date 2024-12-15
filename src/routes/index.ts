@@ -3,7 +3,7 @@ import { Router } from "express";
 import productRoute from "./ProductRoute";
 import customerRoute from "./CustomerRoute";
 import authRoute from "./AuthRoute";
-import saleRoute from "./SaleROute";
+import saleRoute from "./SaleROute"
 
 const router = Router();
 
