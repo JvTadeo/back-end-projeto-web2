@@ -26,6 +26,12 @@ export class SupabaseService {
         return { data, error };
     }
 
+    public async getProductById(id: string) : Promise<{ data: any; error: any }> {
+        const supabase = this.createAuthenticatedClient('');
+        const { data, error } = await supabase.from('Products').select('*').eq('id', id);
+        return { data, error };
+    }
+
     public async getAllCustomers() : Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient('');
         const { data, error } = await supabase.from('Customers').select('*');
@@ -87,22 +93,6 @@ export class SupabaseService {
 
     public async createCustomerWithIncrementedId(customer: Customer, token: string): Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient(token);
-        
-        // Get the last product ID
-        const { data: lastCustomer, error: lastCustomerError } = await supabase
-            .from('Customers')
-            .select('id')
-            .order('id', { ascending: false })
-            .limit(1)
-            .single();
-        
-        if (lastCustomerError) {
-            return { data: null, error: lastCustomerError };
-        }
-
-        // Increment the ID
-        const newCustomerId = lastCustomer ? lastCustomer.id + 1 : 1;
-        customer.id = newCustomerId;
 
         // Insert the new product
         const { data, error } = await supabase.from('Customers').insert([customer]);
@@ -177,8 +167,58 @@ export class SupabaseService {
 
     public async updateCustomer(customer: Customer, token: string): Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient(token);
-        const { data, error } = await supabase.from('Customers').update(customer).eq('id', customer.id);
+        const { data, error } = await supabase.from('Customers').update(customer).eq('cpf', parseInt(customer.cpf));
         return { data, error };
     }
+    //#endregion
+
+    //#region DELETE
+
+    public async deleteCustomerByCpf(cpf: string, token: string) : Promise<{ data: any; error: any }> {
+        const supabase = this.createAuthenticatedClient(token);
+        const { data, error } = await supabase.from('Customers').delete().eq('cpf', parseInt(cpf));
+        return { data, error };
+    }
+
+    public async deleteProductById(id: string, token: string) : Promise<{ data: any; error: any }> {
+        const supabase = this.createAuthenticatedClient("");
+
+        const product = await this.getProductById(id);
+
+        await this.deleteImage(product.data[0].image_url, token);
+
+        const { data, error } = await supabase.from('Products').delete().eq('id', id);
+
+        return { data, error };
+    }
+
+    public async deleteImage(imageUrl: string, token: string) : Promise<{ data: any; error: any }> {
+        const supabase = this.createAuthenticatedClient(token);
+
+        const imagePath = this.extractImagePathFromSignedUrl(imageUrl)
+
+        const { data, error } = await supabase.storage.from('uploads').remove([imagePath]);
+        return { data, error };
+    }
+    //#endregion
+
+    //#region Private
+    private extractImagePathFromSignedUrl(signedUrl: string): string {
+        // Verifica se a URL possui a parte '/object/sign/'
+        const parts = signedUrl.split('/object/sign/');
+        if (parts.length > 1) {
+            // A primeira parte contém a base da URL (não precisamos disso), então pegamos a segunda
+            const pathWithToken = parts[1];
+    
+            // Dividimos a URL no token (parte após '?')
+            const path = pathWithToken.split('?')[0]; 
+
+            // Retorna o caminho do arquivo dentro do bucket
+            return path; // Exemplo: "uploads/5353285.webp"
+        }
+    
+        // Se não encontrar a parte "/object/sign/", lança um erro
+        throw new Error('Invalid signed URL');
+      }
     //#endregion
 }
