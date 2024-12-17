@@ -7,4 +7,5 @@ const customerController = new CustomerController();
 customerRoute.get("/customers", customerController.getCustomers);
 customerRoute.post("/customers", customerController.createCustomer);
 customerRoute.put("/customers", customerController.updateCustomer);
+customerRoute.delete("/customers", customerController.deleteCustomerByCpf);
 export default customerRoute;
