@@ -10,7 +10,7 @@ dotenv.config();
 export class SupabaseService {
 
     private createAuthenticatedClient(token: string) {
-        return createClient(process.env.SUPABASE_URL as string, process.env.SUPABASE_KEY as string, {
+        return createClient(process.env.SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE as string, {
             global: {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -58,6 +58,7 @@ export class SupabaseService {
     //#endregion
 
     //#region POSTS
+
     public async login( email: string, password: string) : Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient('');
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -156,9 +157,11 @@ export class SupabaseService {
 
         return { data, error };
     }
+
     //#region 
 
     //#region PUTS
+
     public async updateProduct(product: Product, token: string): Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient(token);
         const { data, error } = await supabase.from('Products').update(product).eq('id', product.id);
@@ -170,6 +173,7 @@ export class SupabaseService {
         const { data, error } = await supabase.from('Customers').update(customer).eq('cpf', parseInt(customer.cpf));
         return { data, error };
     }
+
     //#endregion
 
     //#region DELETE
@@ -189,7 +193,7 @@ export class SupabaseService {
 
         const { data, error } = await supabase.from('Products').delete().eq('id', id);
 
-        return { data, error };
+        return product;
     }
 
     public async deleteImage(imageUrl: string, token: string) : Promise<{ data: any; error: any }> {
@@ -200,25 +204,30 @@ export class SupabaseService {
         const { data, error } = await supabase.storage.from('uploads').remove([imagePath]);
         return { data, error };
     }
+
+    //#endregion
+
+    //#region Public
+    public async verifyUser(token: string) : Promise<{ data: any; error: any }> {
+        const supabase = this.createAuthenticatedClient('');
+        const { data, error } = await supabase.auth.getUser(token);
+        return { data, error };
+    }
     //#endregion
 
     //#region Private
-    private extractImagePathFromSignedUrl(signedUrl: string): string {
-        // Verifica se a URL possui a parte '/object/sign/'
-        const parts = signedUrl.split('/object/sign/');
-        if (parts.length > 1) {
-            // A primeira parte contém a base da URL (não precisamos disso), então pegamos a segunda
-            const pathWithToken = parts[1];
-    
-            // Dividimos a URL no token (parte após '?')
-            const path = pathWithToken.split('?')[0]; 
 
-            // Retorna o caminho do arquivo dentro do bucket
-            return path; // Exemplo: "uploads/5353285.webp"
+    private extractImagePathFromSignedUrl(signedUrl: string): string {
+        // Verifica se a URL contém '/object/public/'
+        const parts = signedUrl.split('/object/public/');
+        if (parts.length > 1) {
+            // Retorna o caminho após '/object/public/'
+            return parts[1]; // Exemplo: "uploads/productImages/5353643.webp"
         }
-    
-        // Se não encontrar a parte "/object/sign/", lança um erro
-        throw new Error('Invalid signed URL');
-      }
+
+        // Se a estrutura esperada não for encontrada, lança um erro
+        throw new Error('Invalid public URL');
+    }
+
     //#endregion
 }
