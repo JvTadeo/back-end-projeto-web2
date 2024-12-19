@@ -58,6 +58,7 @@ export class SupabaseService {
     //#endregion
 
     //#region POSTS
+
     public async login( email: string, password: string) : Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient('');
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -156,9 +157,11 @@ export class SupabaseService {
 
         return { data, error };
     }
+
     //#region 
 
     //#region PUTS
+
     public async updateProduct(product: Product, token: string): Promise<{ data: any; error: any }> {
         const supabase = this.createAuthenticatedClient(token);
         const { data, error } = await supabase.from('Products').update(product).eq('id', product.id);
@@ -170,6 +173,7 @@ export class SupabaseService {
         const { data, error } = await supabase.from('Customers').update(customer).eq('cpf', parseInt(customer.cpf));
         return { data, error };
     }
+
     //#endregion
 
     //#region DELETE
@@ -200,9 +204,19 @@ export class SupabaseService {
         const { data, error } = await supabase.storage.from('uploads').remove([imagePath]);
         return { data, error };
     }
+
+    //#endregion
+
+    //#region Public
+    public async verifyUser(token: string) : Promise<{ data: any; error: any }> {
+        const supabase = this.createAuthenticatedClient('');
+        const { data, error } = await supabase.auth.getUser(token);
+        return { data, error };
+    }
     //#endregion
 
     //#region Private
+
     private extractImagePathFromSignedUrl(signedUrl: string): string {
         // Verifica se a URL possui a parte '/object/sign/'
         const parts = signedUrl.split('/object/sign/');
@@ -219,6 +233,7 @@ export class SupabaseService {
     
         // Se não encontrar a parte "/object/sign/", lança um erro
         throw new Error('Invalid signed URL');
-      }
+    }
+
     //#endregion
 }
