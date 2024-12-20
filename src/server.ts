@@ -7,7 +7,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://back-end-projeto-web2.onrender.com', 'localhost:3000'],
+}));
 app.use(express.json());
 
 app.use(router);
