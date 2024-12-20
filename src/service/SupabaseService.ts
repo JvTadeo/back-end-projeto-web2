@@ -118,7 +118,7 @@ export class SupabaseService {
         // Increment the ID
         const newSaleId = lastSale ? lastSale.id + 1 : 1;
         sale.id = newSaleId;
-        console.log(sale);
+
         sale.products.forEach(async (product) => {
             const { data, error } = await this.updateProductQuantity(product.product_id, product.quantity, token);
             if (error) {
@@ -189,20 +189,9 @@ export class SupabaseService {
 
         const product = await this.getProductById(id);
 
-        await this.deleteImage(product.data[0].image_url, token);
-
         const { data, error } = await supabase.from('Products').delete().eq('id', id);
 
         return product;
-    }
-
-    public async deleteImage(imageUrl: string, token: string) : Promise<{ data: any; error: any }> {
-        const supabase = this.createAuthenticatedClient(token);
-
-        const imagePath = this.extractImagePathFromSignedUrl(imageUrl)
-
-        const { data, error } = await supabase.storage.from('uploads').remove([imagePath]);
-        return { data, error };
     }
 
     //#endregion
@@ -213,21 +202,5 @@ export class SupabaseService {
         const { data, error } = await supabase.auth.getUser(token);
         return { data, error };
     }
-    //#endregion
-
-    //#region Private
-
-    private extractImagePathFromSignedUrl(signedUrl: string): string {
-        // Verifica se a URL contém '/object/public/'
-        const parts = signedUrl.split('/object/public/');
-        if (parts.length > 1) {
-            // Retorna o caminho após '/object/public/'
-            return parts[1]; // Exemplo: "uploads/productImages/5353643.webp"
-        }
-
-        // Se a estrutura esperada não for encontrada, lança um erro
-        throw new Error('Invalid public URL');
-    }
-
     //#endregion
 }

@@ -55,12 +55,12 @@ export class ProductsController {
     }
 
     public async createProduct(req: Request, res: Response) : Promise<void> {
-        const { name, description, price, stock, image_url, brand } = req.body;
+        const { name, description, price, stock, brand } = req.body;
 
         const token = req.headers.authorization as string;
         const tokenWithoutBearer = token.replace('Bearer ', '');
 
-        const product : Product = { id:0, name, description, price, stock, image_url, brand }; 
+        const product : Product = { id:0, name, description, price, stock, brand }; 
 
         const { data, error } = await this.supabaseService.createProductWithIncrementedId(product, tokenWithoutBearer);
 
@@ -73,12 +73,12 @@ export class ProductsController {
     }
 
     public async updateProduct(req: Request, res: Response) : Promise<void> {
-        const { id, name, description, price, stock, image_url, brand } = req.body;
+        const { id, name, description, price, stock, brand } = req.body;
 
         const token = req.headers.authorization as string;
         const tokenWithoutBearer = token.replace('Bearer ', '');
 
-        const product : Product = { id, name, description, price, stock, image_url, brand }; 
+        const product : Product = { id, name, description, price, stock, brand }; 
 
         const { data, error } = await this.supabaseService.updateProduct(product, tokenWithoutBearer);
 
