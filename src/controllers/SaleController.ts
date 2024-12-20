@@ -23,7 +23,7 @@ export class SaleController {
         const {data, error} = await this.supabaseService.getSales();
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
@@ -38,7 +38,7 @@ export class SaleController {
         const {data, error} = await this.supabaseService.getSalesByCustomerId(req.params.customer_id);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(404).json(error);
             return
         }
 
@@ -53,7 +53,7 @@ export class SaleController {
         const {data, error} = await this.supabaseService.getSalesByCustomerId(req.params.customer_id);
         const reportCreate = this.processReportData (data);
         if (error) {
-            res.status(500).json(error);
+            res.status(404).json(error);
             return
         }
         res.status(200).json(reportCreate);
@@ -64,7 +64,7 @@ export class SaleController {
         const {data, error} = await this.supabaseService.getSalesByPeriod(start_date, end_date);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(404).json(error);
             return
         }
 
@@ -86,7 +86,7 @@ export class SaleController {
         const { data, error } = await this.supabaseService.createSaleWithIncrementedId(sale, tokenWithoutBearer);
         
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
