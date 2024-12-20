@@ -19,7 +19,7 @@ export class CustomerController {
         const {data, error} = await this.supabaseService.getAllCustomers();
 
         if (error) {
-            res.status(500).json(error);
+            res.status(401).json(error);
             return
         }
         res.status(200).json(data);
@@ -36,7 +36,7 @@ export class CustomerController {
         const { data, error } = await this.supabaseService.createCustomerWithIncrementedId(customer, tokenWithoutBearer);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
@@ -54,7 +54,7 @@ export class CustomerController {
         const { data, error } = await this.supabaseService.updateCustomer(customer, tokenWithoutBearer);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
@@ -71,7 +71,7 @@ export class CustomerController {
         const { data, error } = await this.supabaseService.deleteCustomerByCpf(formatCpf, tokenWithoutBearer);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
