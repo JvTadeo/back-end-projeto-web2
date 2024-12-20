@@ -15,7 +15,7 @@ export class AuthController {
         const {data, error} = await this.supabaseService.login(email, password);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(401).json(error);
             return
         }
         res.status(200).json(data);
