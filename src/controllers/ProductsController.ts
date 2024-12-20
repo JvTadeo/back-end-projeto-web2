@@ -19,7 +19,7 @@ export class ProductsController {
         const {data, error} = await this.supabaseService.getAllProducts();
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
         res.status(200).json(data);
@@ -31,7 +31,7 @@ export class ProductsController {
         const { data, error } = await this.supabaseService.getProductById(id);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(404).json(error);
             return
         }
 
@@ -47,7 +47,7 @@ export class ProductsController {
         const { data, error } = await this.supabaseService.deleteProductById(id, tokenWithoutBearer);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
@@ -64,7 +64,7 @@ export class ProductsController {
         const { data, error } = await this.supabaseService.createProductWithIncrementedId(product, tokenWithoutBearer);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
@@ -82,7 +82,7 @@ export class ProductsController {
         const { data, error } = await this.supabaseService.updateProduct(product, tokenWithoutBearer);
 
         if (error) {
-            res.status(500).json(error);
+            res.status(400).json(error);
             return
         }
 
