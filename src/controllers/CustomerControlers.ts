@@ -18,10 +18,6 @@ export class CustomerController {
     public async getCustomers(req: Request, res: Response) : Promise<void> {
         const {data, error} = await this.supabaseService.getAllCustomers();
 
-        data.forEach((customer: Customer) => {
-            customer.cpf = customer.cpf.toString().replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-        });
-
         if (error) {
             res.status(500).json(error);
             return
@@ -32,12 +28,10 @@ export class CustomerController {
     public async createCustomer(req: Request, res: Response) : Promise<void> {
         const { cpf, name, email, phone, address } = req.body;
 
-        const formatCpf = cpf.replace(/\D/g, '');
-
         const token = req.headers.authorization as string;
         const tokenWithoutBearer = token.replace('Bearer ', '');
 
-        const customer : Customer = { cpf:formatCpf, name, email, phone, address };
+        const customer : Customer = { cpf, name, email, phone, address };
 
         const { data, error } = await this.supabaseService.createCustomerWithIncrementedId(customer, tokenWithoutBearer);
 
@@ -51,13 +45,11 @@ export class CustomerController {
 
     public async updateCustomer(req: Request, res: Response) : Promise<void> {
         const { cpf, name, email, phone, address } = req.body;
-
-        const formatCpf = cpf.replace(/\D/g, '');
         
         const token = req.headers.authorization as string;
         const tokenWithoutBearer = token.replace('Bearer ', '');
         
-        const customer : Customer = { cpf:formatCpf, name, email, phone, address };
+        const customer : Customer = { cpf, name, email, phone, address };
 
         const { data, error } = await this.supabaseService.updateCustomer(customer, tokenWithoutBearer);
 
